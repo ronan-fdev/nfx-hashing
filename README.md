@@ -130,25 +130,21 @@ target_link_libraries(your_target PRIVATE nfx-hashing::nfx-hashing)
 
 ### Building
 
-#### Performance Optimization (Optional)
+> ⚠️ **Important**: The library uses runtime CPU detection for SSE4.2 support, but **compiler flags are still required** to emit SIMD instructions. Without proper flags, the library **silently falls back** to software implementation even if your CPU supports SSE4.2.
 
-For best performance, compile with SSE4.2 support to enable hardware-accelerated CRC32-C hashing:
+**Compiler Flags for SIMD:**
 
-**Compiler Flags:**
-
-- **GCC/Clang**: Add `-msse4.2` flag
-- **MSVC**: Add `/arch:AVX` flag (minimum for SSE4.2 on MSVC)
+- **GCC/Clang**: `-march=native` (auto-detect) or specific flags like `-msse4.2`, `-mavx`, `-mavx2`
+- **MSVC**: `/arch:AVX` or `/arch:AVX2`
 
 **CMake Example:**
 
 ```cmake
 target_compile_options(your_target PRIVATE
     $<$<CXX_COMPILER_ID:MSVC>:/arch:AVX2>
-    $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:-msse4.2>
+    $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:-march=native>
 )
 ```
-
-**Note:** Without these flags, the library automatically falls back to CRC32-C software implementation.
 
 **Build Commands:**
 

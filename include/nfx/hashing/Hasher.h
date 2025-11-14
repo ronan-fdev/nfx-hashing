@@ -136,7 +136,7 @@ namespace nfx::hashing
 	 *          via the `is_transparent` type alias, allowing heterogeneous key comparisons.
 	 *
 	 *          **Supported Types:**
-	 *          - **Strings**: std::string, std::string_view, const char* → uses CRC32-C hashing
+	 *          - **Strings**: std::string, std::string_view, const char* → CRC32-C with SSE4.2 hardware acceleration (requires `-march=native`/`-msse4.2` or `/arch:AVX`)
 	 *          - **Integers**: All integral types → uses multiplicative hashing (Knuth/Wang)
 	 *          - **Pointers**: Generic pointers → hashes the address as uintptr_t
 	 *          - **Floating-point**: float, double → normalizes special values (+0/-0, NaN) and hashes bit representation

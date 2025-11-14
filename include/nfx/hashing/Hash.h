@@ -52,10 +52,16 @@ namespace nfx::hashing
 	 * @details
 	 * Unified template-based hash function that provides a clean, STL-style API for hashing values.
 	 * The function automatically selects appropriate algorithms based on input type:
-	 * - **Strings**: CRC32-C (hardware-accelerated when available)
+	 * - **Strings**: CRC32-C (SSE4.2 hardware-accelerated when available, compiler flags required)
 	 * - **Integers**: Multiplicative hashing (Knuth for 32-bit, Wang for 64-bit)
 	 * - **Floating-point**: Bit-representation hashing with normalization
 	 * - **Complex types**: Recursive element hashing with combining
+	 *
+	 * **Hardware Acceleration**: String hashing uses SSE4.2 CRC32-C instructions when:
+	 * 1. CPU supports SSE4.2 (runtime detection)
+	 * 2. Code compiled with proper flags: `-march=native` or `-msse4.2` (GCC/Clang), `/arch:AVX` (MSVC)
+	 *
+	 * Without compiler flags, software fallback is used even if CPU supports SSE4.2.
 	 *
 	 * **Default Seed**: FNV offset basis (0x811C9DC5 for 32-bit, 0xCBF29CE484222325 for 64-bit)
 	 * provides consistent initialization across the library. For zero-seed behavior,
@@ -67,10 +73,10 @@ namespace nfx::hashing
 	 * // Basic usage with default FNV seed
 	 * auto h1 = hash<int>(42);                           // uint32_t, seed=0x811C9DC5
 	 * auto h2 = hash<std::string>("hello");              // uint32_t, seed=0x811C9DC5
-	 * 
+	 *
 	 * // 64-bit hash output
 	 * auto h3 = hash<std::string, uint64_t>("hello");    // uint64_t, seed=0xCBF29CE484222325
-	 * 
+	 *
 	 * // Custom seeds
 	 * auto h4 = hash<int, uint32_t, 0>(42);              // Zero seed (no mixing)
 	 * auto h5 = hash<int, uint32_t, 0xDEADBEEF>(42);     // Custom seed

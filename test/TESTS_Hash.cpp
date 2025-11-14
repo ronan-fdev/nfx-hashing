@@ -306,7 +306,7 @@ TEST( Hash, EmptyStrings )
 	auto h2 = nfx::hashing::hash<std::string_view>( "" );
 
 	EXPECT_EQ( h1, h2 );
-	// Empty string with default seed of 0 may produce 0, which is acceptable
+	// Empty strings should hash consistently
 }
 
 TEST( Hash, ZeroValues )

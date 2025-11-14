@@ -77,7 +77,17 @@ namespace nfx::hashing
 	 * @param[in] hash The current hash value.
 	 * @param[in] ch The character (byte) to incorporate into the hash.
 	 * @return The updated hash value.
+	 * @details This function uses SSE4.2 hardware instructions (_mm_crc32_u8) when available.
+	 *          Falls back to crc32cSoft() if CPU doesn't support SSE4.2.
+	 *
+	 * @warning **Compiler flags required for hardware acceleration:**
+	 *          - GCC/Clang: `-march=native` or `-msse4.2`
+	 *          - MSVC: `/arch:AVX` or `/arch:AVX2`
+	 *          Without these flags, the compiler won't emit SSE4.2 instructions even if
+	 *          the CPU supports them, resulting in software fallback performance.
+	 *
 	 * @see https://en.wikipedia.org/wiki/Cyclic_redundancy_check
+	 * @see https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#text=_mm_crc32_u8
 	 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 	 */
 	[[nodiscard]] inline uint32_t crc32c( uint32_t hash, uint8_t ch ) noexcept;
