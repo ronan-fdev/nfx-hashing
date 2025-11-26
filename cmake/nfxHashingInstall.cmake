@@ -39,14 +39,14 @@ install(
 # Install library targets
 #----------------------------------------------
 
-set(INSTALL_TARGETS)
+set(install_targets)
 
 # Header-only interface library
-list(APPEND INSTALL_TARGETS ${PROJECT_NAME})
+list(APPEND install_targets ${PROJECT_NAME})
 
-if(INSTALL_TARGETS)
+if(install_targets)
 	install(
-		TARGETS ${INSTALL_TARGETS}
+		TARGETS ${install_targets}
 		EXPORT nfx-hashing-targets
 		ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 			COMPONENT Development
@@ -113,13 +113,18 @@ install(
 install(
 	FILES "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.txt"
 	DESTINATION "${CMAKE_INSTALL_DOCDIR}/licenses"
+	RENAME "LICENSE-${PROJECT_NAME}.txt"
 )
 
-install(
-	DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/licenses/"
-	DESTINATION "${CMAKE_INSTALL_DOCDIR}/licenses"
-	FILES_MATCHING PATTERN "LICENSE.txt-*"
-)
+file(GLOB LICENSE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/licenses/LICENSE-*")
+foreach(LICENSE_FILE ${LICENSE_FILES})
+	get_filename_component(LICENSE_NAME ${LICENSE_FILE} NAME)
+	install(
+		FILES ${LICENSE_FILE}
+		DESTINATION "${CMAKE_INSTALL_DOCDIR}/licenses"
+		RENAME "${LICENSE_NAME}.txt"
+	)
+endforeach()
 
 #----------------------------------------------
 # Install documentation
@@ -152,4 +157,4 @@ if(NFX_HASHING_BUILD_DOCUMENTATION)
 	endif()
 endif()
 
-message(STATUS "Installation configured for targets: ${INSTALL_TARGETS}")
+message(STATUS "Installation configured for targets: ${install_targets}")

@@ -15,9 +15,9 @@ endif()
 # Samples source files
 #----------------------------------------------
 
-set(SAMPLE_SOURCES)
+set(sample_sources)
 
-list(APPEND SAMPLE_SOURCES
+list(APPEND sample_sources
 	Sample_AdvancedHashing.cpp
 	Sample_Hash.cpp
 	Sample_Hasher.cpp
@@ -28,7 +28,7 @@ list(APPEND SAMPLE_SOURCES
 # Configure samples executables
 #----------------------------------------------
 
-foreach(sample_source ${SAMPLE_SOURCES})
+foreach(sample_source ${sample_sources})
 	get_filename_component(sample_target_name ${sample_source} NAME_WE)
 
 	if(NOT TARGET ${sample_target_name})
