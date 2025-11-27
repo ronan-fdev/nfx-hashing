@@ -9,7 +9,7 @@
 cmake_minimum_required(VERSION 3.20)
 
 project(nfx-hashing
-	VERSION 0.1.1
+	VERSION 0.1.2
 	DESCRIPTION "Modern C++20 header-only hashing library with hardware acceleration"
 	HOMEPAGE_URL "https://github.com/nfx-libs/nfx-hashing"
 	LANGUAGES CXX
